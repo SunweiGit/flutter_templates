@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class HotelAppTheme {
   static TextTheme _buildTextTheme(TextTheme base) {
-    const String fontName = 'WorkSans';
+    const String fontName = 'alibaba';
     return base.copyWith(
       headline1: base.headline1?.copyWith(fontFamily: fontName),
       headline2: base.headline2?.copyWith(fontFamily: fontName),

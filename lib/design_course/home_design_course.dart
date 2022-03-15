@@ -218,7 +218,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                         padding: const EdgeInsets.only(left: 16, right: 16),
                         child: TextFormField(
                           style: const TextStyle(
-                            fontFamily: 'WorkSans',
+                            fontFamily: 'alibaba',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                             color: DesignCourseAppTheme.nearlyBlue,
@@ -296,7 +296,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
           SizedBox(
             width: 60,
             height: 60,
-            child: Image.asset('assets/design_course/userImage.png'),
+            child: Image.asset('assets/design_course/liondance-logo.jpg'),
           )
         ],
       ),

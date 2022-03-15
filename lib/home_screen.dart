@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
+import 'config/setting.dart';
 import 'model/homelist.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   bool multiple = true;
 
   late final AnimationController animationController;
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +25,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Future<bool> getData() async {
+
     await Future<dynamic>.delayed(const Duration());
     return true;
   }
@@ -115,11 +118,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: Padding(
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
-                  'Flutter UI',
+                  appName,
                   style: TextStyle(
                     fontSize: 22,
                     color: AppTheme.darkText,
-                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
