@@ -25,3 +25,36 @@ class HomeList {
     ),
   ];
 }
+
+class Recommend {
+  Recommend(
+      {required this.navigateScreen,
+      required this.route,
+      required this.param,
+      required this.imageUrl,
+      required this.name,
+      required this.description,
+      required this.id,
+      required this.sort});
+
+  Widget navigateScreen;
+  String route;
+  String param;
+  String imageUrl;
+  String name;
+  String description;
+  String sort;
+  String id;
+
+  Recommend fromJson(Map<String, dynamic> json) {
+    return Recommend(
+        navigateScreen: const HotelHomeScreen(),
+        route: json['route'],
+        param: json['param'],
+        imageUrl: json['image_url'],
+        name: json['name'],
+        description: json['description'],
+        sort: json['sort'],
+        id: json['id']);
+  }
+}

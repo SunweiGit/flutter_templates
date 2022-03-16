@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:liondance/widget/ParallaxWidget.dart';
 
+import 'api/recommendApi.dart';
 import 'app_theme.dart';
 import 'config/setting.dart';
+import 'hotel_booking/hotel_home_screen.dart';
 import 'model/homelist.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -14,18 +17,36 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   List<HomeList> homeList = HomeList.homeList;
   bool multiple = true;
+  int page = 1;
+  int size = 10;
 
   late final AnimationController animationController;
+  late final RecommendApi recommendApi = RecommendApi();
 
   @override
   void initState() {
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
+    getRecommend();
+  }
+
+  getRecommend() {
+    recommendApi
+        .search(page, size, '')
+        .then((value) => {
+              setState(() {
+                for (final recommend in value['result']) {
+                  homeList.add(HomeList(
+                      navigateScreen: const HotelHomeScreen(),
+                      imagePath: recommend['image_url']));
+                }
+              })
+            })
+        .onError((error, stackTrace) => {});
   }
 
   Future<bool> getData() async {
-
     await Future<dynamic>.delayed(const Duration());
     return true;
   }
@@ -53,12 +74,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 appBar(),
                 Expanded(
                   child: GridView(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    padding: const EdgeInsets.only(left: 5, right: 5),
                     physics: const BouncingScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: multiple ? 2 : 1,
-                      mainAxisSpacing: 12.0,
-                      crossAxisSpacing: 12.0,
+                      mainAxisSpacing: 1.0,
+                      crossAxisSpacing: 1.0,
                       childAspectRatio: 1.5,
                     ),
                     children: List<Widget>.generate(
@@ -175,7 +196,43 @@ class HomeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
+    return InkWell(
+      splashColor: Colors.grey.withOpacity(0.2),
+      borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+      onTap: () => callBack(),
+      child: ParallaxWidget(recommend: listData),
+    );
+    AnimatedBuilder(
+      animation: animationController,
+      builder: (BuildContext context, _) {
+        return FadeTransition(
+          opacity: animation,
+          child: Transform(
+            transform: Matrix4.translationValues(
+                0.0, 50 * (1.0 - animation.value), 0.0),
+            child: AspectRatio(
+              aspectRatio: 1.5,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                child: InkWell(
+                  splashColor: Colors.grey.withOpacity(0.2),
+                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                  onTap: () => callBack(),
+                  child: ParallaxWidget(recommend: listData),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    InkWell(
+      splashColor: Colors.grey.withOpacity(0.2),
+      borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+      onTap: () => callBack(),
+      child: ParallaxWidget(recommend: listData),
+    );
+    AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, _) {
         return FadeTransition(

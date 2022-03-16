@@ -296,7 +296,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
           SizedBox(
             width: 60,
             height: 60,
-            child: Image.asset('assets/design_course/liondance-logo.jpg'),
+            child: Image.asset('assets/image/liondance-logo2.jpg'),
           )
         ],
       ),

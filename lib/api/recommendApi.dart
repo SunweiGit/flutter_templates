@@ -16,6 +16,6 @@ class RecommendApi {
       "size": sizeNum,
       "searchContent": searchContent
     };
-    return httpClientUtils.getCache(options, "/recommend/search", map);
+    return httpClientUtils.get(options, "/recommend/search", map);
   }
 }
