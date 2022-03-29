@@ -20,6 +20,7 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
   late final List<DrawerList> drawerList;
+
   @override
   void initState() {
     super.initState();
@@ -30,28 +31,28 @@ class _HomeDrawerState extends State<HomeDrawer> {
     drawerList = <DrawerList>[
       DrawerList(
         index: DrawerIndex.home,
-        labelName: 'Home',
+        labelName: '系统主页',
         icon: const Icon(Icons.home),
       ),
       DrawerList(
         index: DrawerIndex.help,
-        labelName: 'Help',
+        labelName: '获取帮助',
         isAssetsImage: true,
         imageName: 'assets/images/supportIcon.png',
       ),
       DrawerList(
         index: DrawerIndex.feedback,
-        labelName: 'Feedback',
+        labelName: '联系我们',
         icon: const Icon(Icons.help),
       ),
       DrawerList(
         index: DrawerIndex.invite,
-        labelName: 'Invite Friend',
+        labelName: '分享朋友',
         icon: const Icon(Icons.group),
       ),
       DrawerList(
         index: DrawerIndex.about,
-        labelName: 'About',
+        labelName: '应用许可',
         icon: const Icon(Icons.info),
       ),
     ];
@@ -101,7 +102,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             child: ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/images/liondance-logo3.png'),
+                              child: Image.asset(
+                                  'assets/images/liondance-logo3.png'),
                             ),
                           ),
                         ),
@@ -111,7 +113,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   const Padding(
                     padding: EdgeInsets.only(top: 8, left: 4),
                     child: Text(
-                      'Shaquille Oatmeal',
+                      'lion dance',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppTheme.grey,
@@ -153,7 +155,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     title: const Text(
                       'Sign Out',
                       style: TextStyle(
-                        fontFamily: AppTheme.fontName,
+                        fontFamily: AppTheme.fontFamily,
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                         color: AppTheme.darkText,

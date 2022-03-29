@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../design_course/home_design_course.dart';
 import '../fitness_app/fitness_app_home_screen.dart';
 import '../hotel_booking/hotel_home_screen.dart';
+import '../widget/learn_color.dart';
 
 class HomeList {
   HomeList({required this.navigateScreen, required this.imagePath});
@@ -38,17 +39,27 @@ class Recommend {
       required this.sort});
 
   Widget navigateScreen;
-  String route;
-  String param;
-  String imageUrl;
-  String name;
-  String description;
-  String sort;
-  String id;
+  dynamic route;
+  dynamic param;
+  dynamic imageUrl;
+  dynamic name;
+  dynamic description;
+  dynamic sort;
+  dynamic id;
 
-  Recommend fromJson(Map<String, dynamic> json) {
+  factory Recommend.fromJson(Map<String, dynamic> json) {
+    Widget navigateScreenWidget;
+    switch (json['route']) {
+      case "ColorScreenWidget":
+        navigateScreenWidget = ColorScreenWidget(recommend: json);
+        break;
+      case "ColorScreenWidget":
+      default:
+        navigateScreenWidget = ColorScreenWidget(recommend: json);
+        break;
+    }
     return Recommend(
-        navigateScreen: const HotelHomeScreen(),
+        navigateScreen: navigateScreenWidget,
         route: json['route'],
         param: json['param'],
         imageUrl: json['image_url'],

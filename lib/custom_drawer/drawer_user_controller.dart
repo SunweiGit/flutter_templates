@@ -31,9 +31,11 @@ class _DrawerUserControllerState extends State<DrawerUserController>
     with TickerProviderStateMixin {
   double scrolloffset = 0.0;
 
-  late final ScrollController scrollController;
+  late final ScrollController scrollController =
+      ScrollController(initialScrollOffset: widget.drawerWidth);
   late final AnimationController animationController;
   late final AnimationController iconAnimationController;
+
   @override
   void initState() {
     super.initState();
@@ -43,8 +45,6 @@ class _DrawerUserControllerState extends State<DrawerUserController>
         AnimationController(vsync: this, duration: const Duration());
     iconAnimationController.animateTo(1.0,
         duration: const Duration(), curve: Curves.fastOutSlowIn);
-    scrollController =
-        ScrollController(initialScrollOffset: widget.drawerWidth);
     scrollController.addListener(() {
       if (scrollController.offset <= 0) {
         if (scrolloffset != 1.0) {

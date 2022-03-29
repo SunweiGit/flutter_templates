@@ -5,6 +5,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:hive/hive.dart';
 
 import '../config/setting.dart';
@@ -28,15 +29,26 @@ String generate_MD5(String data) {
   return hex.encode(digest.bytes);
 }
 
+final key = Key.fromUtf8('axap1tanexmj7kiveunnawse');
+final iv = IV.fromUtf8("1954682228745975");
+final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
+
 class HttpClientUtils {
 //进行POST请求
   Future<dynamic> getCache(
       BaseOptions baseOptions, String path, Map<String, dynamic> map) async {
     var box = await Hive.openBox('http_cache');
     var key = generate_MD5(apiVersion + path + map.toString());
-    print(box.containsKey(key));
+    // print(box.containsKey(key));
     if (box.containsKey(key)) {
-      return await box.get(key);
+      if (isEncrypt) {
+        dynamic decode =
+            json.decode(encrypter.decrypt64(await box.get(key), iv: iv));
+        // print(decode);
+        return decode;
+      } else {
+        return await box.get(key);
+      }
     } else {
       Dio dio = Dio(baseOptions);
       Response response = await dio.get(
@@ -45,10 +57,19 @@ class HttpClientUtils {
       );
       switch (response.statusCode) {
         case 200:
-          await box.put(key, response.data);
-          return response.data;
+          if (isEncrypt) {
+            dynamic decode =
+                json.decode(encrypter.decrypt64(response.data, iv: iv));
+            //print(decode);
+            box.put(key, response.data);
+            return decode;
+          } else {
+            box.put(key, response.data);
+            return response.data;
+          }
+
         case 401:
-          print(response.statusCode);
+          // print(response.statusCode);
           break;
       }
     }

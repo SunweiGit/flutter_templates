@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../model/homelist.dart';
+import '../model/home_list.dart';
 
 class ParallaxWidget extends StatelessWidget {
   ParallaxWidget({
@@ -9,7 +9,7 @@ class ParallaxWidget extends StatelessWidget {
     required this.recommend,
   }) : super(key: key);
 
-  final HomeList recommend;
+  final Recommend recommend;
   final GlobalKey _backgroundImageKey = GlobalKey();
 
   @override
@@ -41,7 +41,7 @@ class ParallaxWidget extends StatelessWidget {
       ),
       children: [
         Image.network(
-          recommend.imagePath,
+          recommend.imageUrl,
           key: _backgroundImageKey,
           fit: BoxFit.cover,
         ),
@@ -73,7 +73,7 @@ class ParallaxWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "动物",
+            recommend.name,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -81,7 +81,7 @@ class ParallaxWidget extends StatelessWidget {
             ),
           ),
           Text(
-            "动物时间",
+            recommend.description,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 14,

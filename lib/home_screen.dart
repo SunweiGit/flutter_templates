@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:liondance/widget/ParallaxWidget.dart';
 
 import 'api/recommendApi.dart';
 import 'app_theme.dart';
 import 'config/setting.dart';
-import 'hotel_booking/hotel_home_screen.dart';
-import 'model/homelist.dart';
+import 'model/home_list.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  List<HomeList> homeList = HomeList.homeList;
+  List<Recommend> homeList = [];
   bool multiple = true;
   int page = 1;
   int size = 10;
@@ -25,10 +25,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    //print(page);
+    getRecommend();
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
-    getRecommend();
   }
 
   getRecommend() {
@@ -37,18 +38,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         .then((value) => {
               setState(() {
                 for (final recommend in value['result']) {
-                  homeList.add(HomeList(
-                      navigateScreen: const HotelHomeScreen(),
-                      imagePath: recommend['image_url']));
+                  homeList.add(Recommend.fromJson(recommend));
                 }
               })
             })
         .onError((error, stackTrace) => {});
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration());
-    return true;
   }
 
   @override
@@ -59,65 +53,66 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                appBar(),
-                Expanded(
-                  child: GridView(
-                    padding: const EdgeInsets.only(left: 5, right: 5),
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: multiple ? 2 : 1,
-                      mainAxisSpacing: 1.0,
-                      crossAxisSpacing: 1.0,
-                      childAspectRatio: 1.5,
-                    ),
-                    children: List<Widget>.generate(
-                      homeList.length,
-                      (int index) {
-                        final int count = homeList.length;
-                        final Animation<double> animation =
-                            Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                            parent: animationController,
-                            curve: Interval((1 / count) * index, 1.0,
-                                curve: Curves.fastOutSlowIn),
-                          ),
-                        );
-                        animationController.forward();
-                        return HomeListView(
-                          animation: animation,
-                          animationController: animationController,
-                          listData: homeList[index],
-                          callBack: () {
-                            Navigator.push<dynamic>(
-                              context,
-                              MaterialPageRoute<dynamic>(
-                                builder: (BuildContext context) =>
-                                    homeList[index].navigateScreen,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+    return Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          appBar(),
+          Expanded(
+            child: EasyRefresh(
+                onRefresh: () async {
+                  homeList.clear();
+                  page = 1;
+                  getRecommend();
+                },
+                onLoad: () async {
+                  page++;
+                  getRecommend();
+                },
+                child: GridView(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: multiple ? 2 : 1,
+                    mainAxisSpacing: 1.0,
+                    crossAxisSpacing: 1.0,
+                    childAspectRatio: 1.5,
                   ),
-                ),
-              ],
-            ),
-          );
-        }
-      },
+                  children: List<Widget>.generate(
+                    homeList.length,
+                    (int index) {
+                      final int count = homeList.length;
+                      final Animation<double> animation =
+                          Tween<double>(begin: 0.0, end: 1.0).animate(
+                        CurvedAnimation(
+                          parent: animationController,
+                          curve: Interval((1 / count) * index, 1.0,
+                              curve: Curves.fastOutSlowIn),
+                        ),
+                      );
+                      animationController.forward();
+                      return HomeListView(
+                        animation: animation,
+                        animationController: animationController,
+                        data: homeList[index],
+                        callBack: () {
+                          Navigator.push<dynamic>(
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) =>
+                                  homeList[index].navigateScreen,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                )),
+          ),
+        ],
+      ),
     );
   }
 
@@ -182,27 +177,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
 class HomeListView extends StatelessWidget {
   const HomeListView(
-      {required this.listData,
+      {required this.data,
       required this.callBack,
       required this.animationController,
       required this.animation,
       Key? key})
       : super(key: key);
 
-  final HomeList listData;
+  final Recommend data;
   final VoidCallback callBack;
   final AnimationController animationController;
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.grey.withOpacity(0.2),
-      borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-      onTap: () => callBack(),
-      child: ParallaxWidget(recommend: listData),
-    );
-    AnimatedBuilder(
+    return AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, _) {
         return FadeTransition(
@@ -218,7 +207,7 @@ class HomeListView extends StatelessWidget {
                   splashColor: Colors.grey.withOpacity(0.2),
                   borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                   onTap: () => callBack(),
-                  child: ParallaxWidget(recommend: listData),
+                  child: ParallaxWidget(recommend: data),
                 ),
               ),
             ),
@@ -230,7 +219,7 @@ class HomeListView extends StatelessWidget {
       splashColor: Colors.grey.withOpacity(0.2),
       borderRadius: const BorderRadius.all(Radius.circular(4.0)),
       onTap: () => callBack(),
-      child: ParallaxWidget(recommend: listData),
+      child: ParallaxWidget(recommend: data),
     );
     AnimatedBuilder(
       animation: animationController,
@@ -248,7 +237,7 @@ class HomeListView extends StatelessWidget {
                   alignment: AlignmentDirectional.center,
                   children: <Widget>[
                     Image.asset(
-                      listData.imagePath,
+                      data.imageUrl,
                       fit: BoxFit.cover,
                     ),
                     Material(

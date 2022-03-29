@@ -24,6 +24,9 @@ dependencies:
   dio: ^4.0.4
   dio_cookie_manager: ^2.0.0  #latest version
   audioplayers: ^0.20.1
+  flutter_svg: ^1.0.3
+  adobe_xd: ^2.0.1
+  encrypt: ^5.0.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.2

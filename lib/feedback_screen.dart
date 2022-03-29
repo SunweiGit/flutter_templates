@@ -15,7 +15,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return SingleChildScrollView(
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(
@@ -25,7 +25,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Container(
               padding: const EdgeInsets.only(top: 8),
               child: const Text(
-                'Your Feedback',
+                '您的反馈',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -35,7 +36,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Container(
               padding: const EdgeInsets.only(top: 16),
               child: const Text(
-                'Give your best time for this moment.',
+                '为这一刻付出您最好的时光。',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -48,7 +49,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 padding: const EdgeInsets.only(top: 16),
                 child: Center(
                   child: Container(
-                    width: 120,
+                    width: 140,
                     height: 40,
                     decoration: BoxDecoration(
                       color: Colors.blue,
@@ -64,13 +65,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () =>
-                            FocusScope.of(context).requestFocus(FocusNode()),
+                        onTap: () {},
                         child: const Center(
                           child: Padding(
                             padding: EdgeInsets.all(4.0),
                             child: Text(
-                              'Send',
+                              '发送反馈',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white,
@@ -117,14 +117,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 onChanged: (String txt) {},
                 textInputAction: TextInputAction.done,
                 style: const TextStyle(
-                  fontFamily: AppTheme.fontName,
+                  fontFamily: AppTheme.fontFamily,
                   fontSize: 16,
                   color: AppTheme.darkGrey,
                 ),
                 cursorColor: Colors.blue,
                 decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your feedback...'),
+                    border: InputBorder.none, hintText: '输入您的反馈...'),
               ),
             ),
           ),
