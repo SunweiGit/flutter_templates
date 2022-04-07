@@ -22,6 +22,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
   );
 
   late final AnimationController animationController;
+
   @override
   void initState() {
     super.initState();

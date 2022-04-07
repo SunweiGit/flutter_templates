@@ -11,6 +11,7 @@ class AreaListView extends StatefulWidget {
 
   final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
+
   @override
   _AreaListViewState createState() => _AreaListViewState();
 }
@@ -25,6 +26,7 @@ class _AreaListViewState extends State<AreaListView>
   ];
 
   late final AnimationController animationController;
+
   @override
   void initState() {
     super.initState();

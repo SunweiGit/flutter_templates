@@ -23,6 +23,7 @@ class _TrainingScreenState extends State<TrainingScreen>
 
   late final ScrollController scrollController;
   late final Animation<double> topBarAnimation;
+
   @override
   void initState() {
     super.initState();

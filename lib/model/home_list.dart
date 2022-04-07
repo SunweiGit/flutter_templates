@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../design_course/home_design_course.dart';
 import '../fitness_app/fitness_app_home_screen.dart';
 import '../hotel_booking/hotel_home_screen.dart';
+import '../widget/learn_chinese_characters.dart';
 import '../widget/learn_color.dart';
 
 class HomeList {
@@ -51,11 +52,11 @@ class Recommend {
     Widget navigateScreenWidget;
     switch (json['route']) {
       case "ColorScreenWidget":
-        navigateScreenWidget = ColorScreenWidget(recommend: json);
+        navigateScreenWidget = ChineseCharacterScreenWidget(recommend: json);
         break;
       case "ColorScreenWidget":
       default:
-        navigateScreenWidget = ColorScreenWidget(recommend: json);
+        navigateScreenWidget = ChineseCharacterScreenWidget(recommend: json);
         break;
     }
     return Recommend(

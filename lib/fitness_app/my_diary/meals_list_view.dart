@@ -22,6 +22,7 @@ class _MealsListViewState extends State<MealsListView>
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
 
   late final AnimationController animationController;
+
   @override
   void initState() {
     super.initState();

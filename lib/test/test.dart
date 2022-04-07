@@ -1,205 +1,372 @@
-import 'package:adobe_xd/pinned.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../app_theme.dart';
+import '../model/chinese_character_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
-    theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: AppTheme.textTheme,
-        platform: TargetPlatform.macOS,
-        fontFamily: "alibaba"),
-    home: IPhone12ProMax1(),
-  ));
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: AppTheme.textTheme,
+          platform: TargetPlatform.windows,
+          fontFamily: "alibaba"),
+      home: Scaffold(
+          backgroundColor: const Color(0xffffffff),
+          body: ListView(children: [
+            ChineseCharacterCard(
+              chineseCharacter: ChineseCharacter.fromJson({
+                "id": "",
+                "tag": "",
+                "pronunciation": "",
+                "sort": "",
+                "more": "",
+                "explanation": "",
+                "word": "贵",
+                "pinyin": "guì",
+                "radical": "贝",
+                "stroke": 9,
+                "words": [
+                  "鼠凭社贵",
+                  "鼎贵",
+                  "鬻贵",
+                  "骤贵",
+                  "骄贵",
+                  "靳贵",
+                  "靡贵",
+                  "雍容华贵",
+                  "雅贵",
+                  "雄贵",
+                  "难能可贵",
+                  "隆贵",
+                  "降贵纡尊",
+                  "降贵",
+                  "降尊纡贵",
+                  "陆凯贵盛",
+                  "阿贵",
+                  "长安米贵",
+                  "钦贵",
+                  "金贵",
+                  "金屋贵",
+                  "通贵",
+                  "轻财贵义",
+                  "赵中贵",
+                  "贵齿",
+                  "贵齐",
+                  "贵高",
+                  "贵骨",
+                  "贵骄",
+                  "贵降",
+                  "贵际",
+                  "贵阶",
+                  "贵阀",
+                  "贵门",
+                  "贵长",
+                  "贵金属",
+                  "贵里",
+                  "贵酋",
+                  "贵邸",
+                  "贵邦",
+                  "贵近",
+                  "贵达",
+                  "贵躬",
+                  "贵身",
+                  "贵踞",
+                  "贵赫",
+                  "贵赤卫",
+                  "贵赤",
+                  "贵贾",
+                  "贵贱"
+                ]
+              }),
+            ),
+            ChineseCharacterCard(
+              chineseCharacter: ChineseCharacter.fromJson({
+                "id": "",
+                "tag": "",
+                "pronunciation": "",
+                "sort": "",
+                "more": "",
+                "explanation": "",
+                "word": "贵",
+                "pinyin": "guì",
+                "radical": "贝",
+                "stroke": 9,
+                "words": [
+                  "鼠凭社贵",
+                  "鼎贵",
+                  "鬻贵",
+                  "骤贵",
+                  "骄贵",
+                  "靳贵",
+                  "靡贵",
+                  "雍容华贵",
+                  "雅贵",
+                  "雄贵",
+                  "难能可贵",
+                  "隆贵",
+                  "降贵纡尊",
+                  "降贵",
+                  "降尊纡贵",
+                  "陆凯贵盛",
+                  "阿贵",
+                  "长安米贵",
+                  "钦贵",
+                  "金贵",
+                  "金屋贵",
+                  "通贵",
+                  "轻财贵义",
+                  "赵中贵",
+                  "贵齿",
+                  "贵齐",
+                  "贵高",
+                  "贵骨",
+                  "贵骄",
+                  "贵降",
+                  "贵际",
+                  "贵阶",
+                  "贵阀",
+                  "贵门",
+                  "贵长",
+                  "贵金属",
+                  "贵里",
+                  "贵酋",
+                  "贵邸",
+                  "贵邦",
+                  "贵近",
+                  "贵达",
+                  "贵躬",
+                  "贵身",
+                  "贵踞",
+                  "贵赫",
+                  "贵赤卫",
+                  "贵赤",
+                  "贵贾",
+                  "贵贱"
+                ]
+              }),
+            )
+          ]))));
 }
 
-class IPhone12ProMax1 extends StatelessWidget {
-  IPhone12ProMax1({
-    Key? key,
-  }) : super(key: key);
+class ChineseCharacterCard extends StatelessWidget {
+  const ChineseCharacterCard({required this.chineseCharacter, Key? key})
+      : super(key: key);
+
+  final ChineseCharacter chineseCharacter;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffffffff),
-      body: Stack(
-        children: <Widget>[
-          Pinned.fromPins(
-            Pin(start: 9.0, end: 9.0),
-            Pin(size: 237.0, middle: 0.2496),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xffffffff),
-                    borderRadius: BorderRadius.circular(12.0),
-                    border:
-                        Border.all(width: 3.0, color: const Color(0xff53d3c2)),
-                  ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 150.0, start: 11.0),
-                  Pin(size: 150.0, start: 11.0),
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: const AssetImage('assets/images/img.png'),
-                            fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.only(left: 6, right: 6, top: 3, bottom: 3),
+      child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/images/canva_character_02.png"),
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          width: 80,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage("assets/images/tianzige.png"),
+                            ),
                           ),
-                          border: Border.all(
-                              width: 1.0, color: const Color(0xff53d3c2)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 9.0, 16.0, 14.0),
-                        child: SizedBox.expand(
-                            child: Text(
-                          '你',
-                          style: TextStyle(
-                            fontSize: 124,
-                            color: const Color(0xff707070),
+                          child: Container(
+                            color: Colors.black.withOpacity(.5),
+                            child: Center(
+                              child: Text(
+                                chineseCharacter.word,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 60),
+                              ),
+                            ),
                           ),
-                          softWrap: false,
                         )),
-                      ),
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          height: 80,
+                          child: Table(
+                            columnWidths: const {
+                              0: FixedColumnWidth(40),
+                              1: FixedColumnWidth(100)
+                            },
+                            children: [
+                              TableRow(
+                                children: [
+                                  const Text(
+                                    "拼音",
+                                    style: AppTheme.body1,
+                                  ),
+                                  Text(chineseCharacter.pinyin)
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const Text(
+                                    "部首",
+                                    style: AppTheme.body1,
+                                  ),
+                                  Text(chineseCharacter.radical)
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const Text(
+                                    "笔画",
+                                    style: AppTheme.body1,
+                                  ),
+                                  Text("${chineseCharacter.stroke}  画")
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                  ],
+                ),
+                Container(
+                  color: AppTheme.info,
+                  height: 2,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: Row(
+                      children: const [
+                        Text(
+                          "相关词语",
+                          textAlign: TextAlign.left,
+                          style: AppTheme.title,
+                        )
+                      ],
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Wrap(
+                    spacing: 6,
+                    children: [
+                      for (final word in chineseCharacter.words) Text(word),
                     ],
                   ),
                 ),
-                Pinned.fromPins(
-                  Pin(size: 46.0, middle: 0.4835),
-                  Pin(size: 24.0, start: 11.0),
-                  child: Text(
-                    '拼音',
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: const Color(0xff000000),
-                    ),
-                    softWrap: false,
-                  ),
+                Container(
+                  color: AppTheme.info,
+                  height: 2,
                 ),
-                Align(
-                  alignment: Alignment(-0.033, -0.521),
-                  child: SizedBox(
-                    width: 46.0,
-                    height: 24.0,
-                    child: Text(
-                      '部首',
-                      style: TextStyle(
-                        fontSize: 23,
-                        color: const Color(0xff000000),
+                Container(
+                  alignment: Alignment.bottomLeft,
+                  height: 45,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Center(
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(32.0)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.6),
+                                      offset: const Offset(4, 4),
+                                      blurRadius: 8.0),
+                                ],
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      const Icon(
+                                        FontAwesomeIcons.volumeUp,
+                                        size: 12,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        chineseCharacter.word,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      softWrap: false,
-                    ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Center(
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(32.0)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.6),
+                                      offset: const Offset(4, 4),
+                                      blurRadius: 8.0),
+                                ],
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: const [
+                                      Icon(
+                                        FontAwesomeIcons.eye,
+                                        size: 12,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        '查看更多',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 19.0, middle: 0.624),
-                  Pin(size: 23.0, start: 12.0),
-                  child: Text(
-                    'nǐ',
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: const Color(0xff000000),
-                    ),
-                    softWrap: false,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment(0.261, -0.521),
-                  child: SizedBox(
-                    width: 23.0,
-                    height: 24.0,
-                    child: Text(
-                      '亻',
-                      style: TextStyle(
-                        fontSize: 23,
-                        color: const Color(0xff000000),
-                      ),
-                      softWrap: false,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment(-0.033, -0.075),
-                  child: SizedBox(
-                    width: 46.0,
-                    height: 23.0,
-                    child: Text(
-                      '词语',
-                      style: TextStyle(
-                        fontSize: 23,
-                        color: const Color(0xff000000),
-                      ),
-                      softWrap: false,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment(0.564, -0.07),
-                  child: SizedBox(
-                    width: 98.0,
-                    height: 24.0,
-                    child: Text(
-                      '你好 你们',
-                      style: TextStyle(
-                        fontSize: 23,
-                        color: const Color(0xff000000),
-                      ),
-                      softWrap: false,
-                    ),
-                  ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 153.0, start: 11.0),
-                  Pin(size: 53.0, end: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xff53d3c2),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 153.0, end: 12.0),
-                  Pin(size: 53.0, end: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xff53d3c2),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 46.0, middle: 0.1786),
-                  Pin(size: 30.0, end: 26.0),
-                  child: Text(
-                    '朗读',
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: const Color(0xff222222),
-                    ),
-                  ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 92.0, end: 42.0),
-                  Pin(size: 30.0, end: 22.0),
-                  child: Text(
-                    '查看更多',
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: const Color(0xff222222),
-                    ),
-                  ),
-                ),
+                )
               ],
             ),
-          ),
-        ],
-      ),
+          )),
     );
   }
 }

@@ -8,23 +8,22 @@ main() {
   // json.then((value) => {print(value['result'])});
 }
 
+var httpClientUtils = HttpClientUtils();
+
 class ChineseCharacterApi {
   Future<dynamic> search(
       int pageNum, int sizeNum, String param, String searchContent) {
-    var httpClientUtils = HttpClientUtils();
     var map = {
       "page": pageNum,
       "size": sizeNum,
       "searchContent": searchContent,
     };
     return httpClientUtils.getCache(
-        options, "/chineseCharacter/search" + param, map);
+        options, "/chinese_character/search" + param, map);
   }
 
-  Future<dynamic> findByTag(int pageNum, String param) {
-    var httpClientUtils = HttpClientUtils();
-    var map = {"page": pageNum, "size": 1};
-    return httpClientUtils.getCache(
-        options, "/chineseCharacter/findByTag" + param, map);
+  Future<dynamic> get(String id) {
+    return httpClientUtils
+        .getCache(options, "/chinese_character/get/" + id, {});
   }
 }

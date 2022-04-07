@@ -24,6 +24,7 @@ class BottomBarView extends StatefulWidget {
 class _BottomBarViewState extends State<BottomBarView>
     with TickerProviderStateMixin {
   late final AnimationController animationController;
+
   @override
   void initState() {
     super.initState();
@@ -221,6 +222,7 @@ class TabIcons extends StatefulWidget {
 
 class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
   late final AnimationController animationController;
+
   @override
   void initState() {
     animationController = AnimationController(

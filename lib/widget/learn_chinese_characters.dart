@@ -3,12 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../api/ChineseCharacterApi.dart';
+import '../app_theme.dart';
 import '../hotel_booking/calendar_popup_view.dart';
 import '../hotel_booking/filters_screen.dart';
 import '../hotel_booking/hotel_app_theme.dart';
 import '../hotel_booking/hotel_list_view.dart';
 import '../hotel_booking/model/hotel_list_data.dart';
 import '../model/chinese_character_model.dart';
+import 'error_widget.dart';
 
 class ChineseCharacterScreenWidget extends StatefulWidget {
   Map<String, dynamic> recommend;
@@ -27,16 +29,17 @@ class ChineseCharacterScreenState extends State<ChineseCharacterScreenWidget>
 
   Map<String, dynamic> recommend;
   List<HotelListData> hotelList = HotelListData.hotelList;
+  List<Widget> successList = [];
+  List<Widget> errorList = [];
   final ScrollController _scrollController = ScrollController();
   final ChineseCharacterApi chineseCharacterApi = ChineseCharacterApi();
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
-  int pageNum = 1;
-  int sizeNum = 1;
+  int page = 1;
+  int size = 10;
   String searchContent = "";
   int total = 0;
   List<ChineseCharacter> result = [];
-
   late final AnimationController animationController;
 
   @override
@@ -55,11 +58,27 @@ class ChineseCharacterScreenState extends State<ChineseCharacterScreenWidget>
 
   getData() async {
     chineseCharacterApi
-        .search(pageNum, sizeNum, recommend['param'], searchContent)
+        .search(page, size, recommend['param'], searchContent)
+        .onError((error, stackTrace) => ({
+              errorList.clear(),
+              errorList.add(RetryWidget(
+                onTapCallback: getData(),
+              ))
+            }))
         .then((value) => {
-              for (dynamic data in value['result'])
-                {result.add(ChineseCharacter.fromJson(Map.from(data)))},
-              total = value['total']
+              setState(() {
+                List result = value['result'];
+                if (result.isNotEmpty) {
+                  for (final recommend in result) {
+                    successList.add(ChineseCharacterCard(
+                      chineseCharacter:
+                          ChineseCharacter.fromJson(Map.from(recommend)),
+                    ));
+                  }
+                } else {
+                  page--;
+                }
+              })
             });
   }
 
@@ -70,71 +89,39 @@ class ChineseCharacterScreenState extends State<ChineseCharacterScreenWidget>
         data: HotelAppTheme.buildLightTheme(),
         child: Stack(
           children: <Widget>[
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Column(
-                children: <Widget>[
-                  getAppBarUI(),
-                  Expanded(
-                    child: NestedScrollView(
-                      controller: _scrollController,
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                              return Column(
-                                children: <Widget>[
-                                  getSearchBarUI(),
-                                ],
-                              );
-                            }, childCount: 1),
-                          ),
-                          SliverPersistentHeader(
-                            pinned: true,
-                            floating: true,
-                            delegate: ContestTabHeader(
-                              getFilterBarUI(),
-                            ),
-                          ),
-                        ];
-                      },
-                      body: Container(
-                        color: HotelAppTheme.buildLightTheme().backgroundColor,
-                        child: ListView.builder(
-                          itemCount: hotelList.length,
-                          padding: const EdgeInsets.only(top: 8),
-                          itemBuilder: (BuildContext context, int index) {
-                            final int count =
-                                hotelList.length > 10 ? 10 : hotelList.length;
-                            final Animation<double> animation =
-                                Tween<double>(begin: 0.0, end: 1.0).animate(
-                                    CurvedAnimation(
-                                        parent: animationController,
-                                        curve: Interval(
-                                            (1 / count) * index, 1.0,
-                                            curve: Curves.fastOutSlowIn)));
-                            animationController.forward();
-                            return HotelListView(
+            Column(
+              children: <Widget>[
+                getAppBarUI(),
+                getSearchBarUI(),
+                Expanded(
+                  child: Container(
+                    color: HotelAppTheme.buildLightTheme().backgroundColor,
+                    child: ListView.builder(
+                      itemCount: successList.length,
+                      padding: const EdgeInsets.only(top: 8),
+                      itemBuilder: (BuildContext context, int index) {
+                        final int count =
+                            successList.length > 10 ? 10 : successList.length;
+                        final Animation<double> animation =
+                            Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                    parent: animationController,
+                                    curve: Interval((1 / count) * index, 1.0,
+                                        curve: Curves.fastOutSlowIn)));
+                        animationController.forward();
+                        return successList[index];
+                        /* HotelListView(
                               callback: () {},
-                              hotelData: hotelList[index],
+                              hotelData: successList[index],
                               animation: animation,
                               animationController: animationController,
-                            );
-                          },
-                        ),
-                      ),
+                            );*/
+                      },
                     ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+                if (errorList.isNotEmpty) Expanded(child: errorList.first),
+              ],
             ),
           ],
         ),
@@ -626,5 +613,226 @@ class ContestTabHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return false;
+  }
+}
+
+class ChineseCharacterCard extends StatelessWidget {
+  const ChineseCharacterCard({required this.chineseCharacter, Key? key})
+      : super(key: key);
+
+  final ChineseCharacter chineseCharacter;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 6, right: 6, top: 3, bottom: 3),
+      child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/images/canva_character_02.png"),
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          width: 80,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage("assets/images/tianzige.png"),
+                            ),
+                          ),
+                          child: Container(
+                            color: Colors.black.withOpacity(.5),
+                            child: Center(
+                              child: Text(
+                                chineseCharacter.word,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 60),
+                              ),
+                            ),
+                          ),
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          height: 80,
+                          child: Table(
+                            columnWidths: const {
+                              0: FixedColumnWidth(40),
+                              1: FixedColumnWidth(100)
+                            },
+                            children: [
+                              TableRow(
+                                children: [
+                                  const Text(
+                                    "拼音",
+                                    style: AppTheme.body1,
+                                  ),
+                                  Text(chineseCharacter.pinyin)
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const Text(
+                                    "部首",
+                                    style: AppTheme.body1,
+                                  ),
+                                  Text(chineseCharacter.radical)
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const Text(
+                                    "笔画",
+                                    style: AppTheme.body1,
+                                  ),
+                                  Text("${chineseCharacter.stroke}  画")
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                  ],
+                ),
+                Container(
+                  color: AppTheme.info,
+                  height: 2,
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: Row(
+                      children: const [
+                        Text(
+                          "相关词语",
+                          textAlign: TextAlign.left,
+                          style: AppTheme.title,
+                        )
+                      ],
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Wrap(
+                    spacing: 6,
+                    children: [
+                      for (final word in chineseCharacter.words) Text(word),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: AppTheme.info,
+                  height: 2,
+                ),
+                Container(
+                  alignment: Alignment.bottomLeft,
+                  height: 45,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Center(
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(32.0)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.6),
+                                      offset: const Offset(4, 4),
+                                      blurRadius: 8.0),
+                                ],
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      const Icon(
+                                        FontAwesomeIcons.volumeUp,
+                                        size: 12,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        chineseCharacter.word,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Center(
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(32.0)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.6),
+                                      offset: const Offset(4, 4),
+                                      blurRadius: 8.0),
+                                ],
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: const [
+                                      Icon(
+                                        FontAwesomeIcons.eye,
+                                        size: 12,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        '查看更多',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )),
+    );
   }
 }

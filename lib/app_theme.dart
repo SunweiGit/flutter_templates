@@ -9,13 +9,15 @@ class AppTheme {
   static const Color nearlyBlack = Color(0xFF213333);
   static const Color grey = Color(0xFF3A5160);
   static const Color darkGrey = Color(0xFF313A44);
+  static const Color whiteGrey = Color(0xFFE4E4E4);
 
-  static const Color mutedText = Color(0xFF707070);
-  static const Color primaryText = Color(0xFFF96332);
-  static const Color infoText = Color(0xFF2CA9FF);
-  static const Color successText = Color(0xFF1ACE0F);
-  static const Color warningText = Color(0xFFFF3636);
-  static const Color dangerText = Color(0xFFffb237);
+
+  static const Color muted = Color(0xFF707070);
+  static const Color primary = Color(0xFFF96332);
+  static const Color info = Color(0xFF2CA9FF);
+  static const Color success = Color(0xFF1ACE0F);
+  static const Color warning = Color(0xFFFF3636);
+  static const Color danger = Color(0xFFffb237);
 
   static const Color darkText = Color(0xFF253840);
   static const Color darkerText = Color(0xFF17262A);

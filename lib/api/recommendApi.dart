@@ -8,13 +8,15 @@ main() {
   json.then((value) => {print(value['result'])});
 }
 
+var httpClientUtils = HttpClientUtils();
+
 class RecommendApi {
   Future<dynamic> search(int pageNum, int sizeNum, String searchContent) {
-    var httpClientUtils = HttpClientUtils();
     var map = {
       "page": pageNum,
       "size": sizeNum,
-      "searchContent": searchContent
+      "searchContent": searchContent,
+      "excludes": "@timestamp,@version,sort"
     };
     return httpClientUtils.getCache(options, "/recommend/search", map);
   }

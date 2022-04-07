@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:liondance/widget/ParallaxWidget.dart';
+import 'package:liondance/widget/error_widget.dart';
 
 import 'api/recommendApi.dart';
 import 'app_theme.dart';
@@ -15,7 +16,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  List<Recommend> homeList = [];
+  List<Recommend> successList = [];
+  List<Widget> errorList = [];
   bool multiple = true;
   int page = 1;
   int size = 10;
@@ -26,23 +28,33 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     //print(page);
-    getRecommend();
+    getData();
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
-  getRecommend() {
+  getData() {
     recommendApi
         .search(page, size, '')
         .then((value) => {
               setState(() {
-                for (final recommend in value['result']) {
-                  homeList.add(Recommend.fromJson(recommend));
+                List result = value['result'];
+                if (result.isNotEmpty) {
+                  for (final recommend in result) {
+                    successList.add(Recommend.fromJson(Map.from(recommend)));
+                  }
+                } else {
+                  page--;
                 }
               })
             })
-        .onError((error, stackTrace) => {});
+        .onError((error, stackTrace) => {
+              errorList.clear(),
+              errorList.add(RetryWidget(
+                onTapCallback: getData(),
+              )),
+            });
   }
 
   @override
@@ -63,13 +75,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           Expanded(
             child: EasyRefresh(
                 onRefresh: () async {
-                  homeList.clear();
+                  successList.clear();
                   page = 1;
-                  getRecommend();
+                  getData();
                 },
                 onLoad: () async {
                   page++;
-                  getRecommend();
+                  getData();
                 },
                 child: GridView(
                   padding: const EdgeInsets.only(left: 5, right: 5),
@@ -81,9 +93,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     childAspectRatio: 1.5,
                   ),
                   children: List<Widget>.generate(
-                    homeList.length,
+                    successList.length,
                     (int index) {
-                      final int count = homeList.length;
+                      final int count = successList.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
@@ -96,13 +108,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       return HomeListView(
                         animation: animation,
                         animationController: animationController,
-                        data: homeList[index],
+                        data: successList[index],
                         callBack: () {
                           Navigator.push<dynamic>(
                             context,
                             MaterialPageRoute<dynamic>(
                               builder: (BuildContext context) =>
-                                  homeList[index].navigateScreen,
+                                  successList[index].navigateScreen,
                             ),
                           );
                         },
@@ -111,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   ),
                 )),
           ),
+          if (errorList.isNotEmpty) Expanded(child: errorList.first),
         ],
       ),
     );

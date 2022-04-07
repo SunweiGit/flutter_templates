@@ -1,10 +1,6 @@
-import 'package:flutter/widgets.dart';
-
-import '../widget/learn_chinese_characters.dart';
-
 class ChineseCharacter {
   ChineseCharacter(
-      {required this.navigateScreen,
+      {required this.words,
       required this.word,
       required this.pinyin,
       required this.pronunciation,
@@ -16,25 +12,25 @@ class ChineseCharacter {
       required this.sort,
       required this.tag});
 
-  Widget navigateScreen;
-  dynamic word;
-  dynamic pinyin;
-  dynamic pronunciation;
-  dynamic stroke;
-  dynamic radical;
-  dynamic explanation;
-  dynamic more;
-  dynamic id;
-  dynamic sort;
-  dynamic tag;
+  String word;
+  String pinyin;
+  String radical;
+  String id;
+  int sort;
+  String pronunciation;
+  int stroke;
+  String explanation;
+  String more;
+  List words;
+  List tag;
 
   factory ChineseCharacter.fromJson(Map<String, dynamic> json) {
     return ChineseCharacter(
-      navigateScreen: ChineseCharacterScreenWidget(recommend: json),
       word: json['word'],
       pinyin: json['pinyin'],
       radical: json['radical'],
       stroke: json['stroke'],
+      words: json['words'],
       id: json['id'],
       tag: json['tag'],
       pronunciation: json['pronunciation'],

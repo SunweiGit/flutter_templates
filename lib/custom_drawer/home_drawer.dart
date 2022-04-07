@@ -103,7 +103,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(60.0)),
                               child: Image.asset(
-                                  'assets/images/liondance-logo3.png'),
+                                  'assets/logo/liondance_logo1.png'),
                             ),
                           ),
                         ),

@@ -22,6 +22,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
 
   late final AnimationController animationController;
   late final AnimationController waveAnimationController;
+
   @override
   void initState() {
     super.initState();

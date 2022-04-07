@@ -25,6 +25,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
 
   late final ScrollController scrollController;
   late final Animation<double> topBarAnimation;
+
   @override
   void initState() {
     super.initState();
